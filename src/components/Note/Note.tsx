@@ -6,11 +6,12 @@ import s from "./Note.module.css";
 
 interface NoteProps {
   note: NoteModel;
+  onNoteClicked: (note: NoteModel) => void;
   onDelete: (note: NoteModel) => void;
   className?: string;
 }
 
-const Note = ({ note, className, onDelete }: NoteProps) => {
+const Note = ({ note, className, onDelete, onNoteClicked }: NoteProps) => {
   const { title, text, createdAt, updatedAt } = note;
 
   let createdUpdatedText: string;
@@ -21,7 +22,10 @@ const Note = ({ note, className, onDelete }: NoteProps) => {
   }
 
   return (
-    <Card className={`${s.noteCard} ${className}`}>
+    <Card
+      className={`${s.noteCard} ${className}`}
+      onClick={() => onNoteClicked(note)}
+    >
       <Card.Body className={s.cardBody}>
         <Card.Title className={s.cardTitle}>
           {title}

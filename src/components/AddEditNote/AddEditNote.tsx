@@ -3,21 +3,36 @@ import { useForm } from "react-hook-form";
 import { NoteInput, NoteModel } from "../../models/noteModel";
 import * as NotesApi from "../../services/notes-api";
 
-interface AddNoteProps {
+interface AddEditNoteProps {
+  noteToEdit?: NoteModel;
   onDismiss: () => void;
   onNoteSaved: (note: NoteModel) => void;
 }
 
-const AddNote = ({ onDismiss, onNoteSaved }: AddNoteProps) => {
+const AddEditNote = ({
+  noteToEdit,
+  onDismiss,
+  onNoteSaved,
+}: AddEditNoteProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<NoteInput>();
+  } = useForm<NoteInput>({
+    defaultValues: {
+      title: noteToEdit?.title || "",
+      text: noteToEdit?.text || "",
+    },
+  });
 
   async function onSubmit(input: NoteInput) {
     try {
-      const noteResponse = await NotesApi.createNote(input);
+      let noteResponse: NoteModel;
+      if (noteToEdit) {
+        noteResponse = await NotesApi.updateNote(noteToEdit._id, input);
+      } else {
+        noteResponse = await NotesApi.createNote(input);
+      }
       onNoteSaved(noteResponse);
     } catch (error) {
       console.error(error);
@@ -27,11 +42,11 @@ const AddNote = ({ onDismiss, onNoteSaved }: AddNoteProps) => {
   return (
     <Modal show onHide={onDismiss}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Note</Modal.Title>
+        <Modal.Title>{noteToEdit ? "Edit Note" : "Add Note"}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
-        <Form id="addNoteForm" onSubmit={handleSubmit(onSubmit)}>
+        <Form id="addEditNoteForm" onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="mb-3">
             <Form.Label>Title</Form.Label>
             <Form.Control
@@ -58,7 +73,7 @@ const AddNote = ({ onDismiss, onNoteSaved }: AddNoteProps) => {
       </Modal.Body>
 
       <Modal.Footer>
-        <Button type="submit" form="addNoteForm" disabled={isSubmitting}>
+        <Button type="submit" form="addEditNoteForm" disabled={isSubmitting}>
           Save
         </Button>
       </Modal.Footer>
@@ -66,4 +81,4 @@ const AddNote = ({ onDismiss, onNoteSaved }: AddNoteProps) => {
   );
 };
 
-export default AddNote;
+export default AddEditNote;
