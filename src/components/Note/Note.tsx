@@ -1,5 +1,5 @@
 import { Card } from "react-bootstrap";
-import { NoteModel } from "../../models/note";
+import { NoteModel } from "../../models/noteModel";
 import { formatDate } from "../../utils/formatDate";
 import s from "./Note.module.css";
 
