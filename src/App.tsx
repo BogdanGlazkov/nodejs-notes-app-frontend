@@ -7,6 +7,7 @@ import * as NotesApi from "./services/notes-api";
 import AddEditNote from "./components/AddEditNote/AddEditNote";
 import SignUpModal from "./components/SignUpModal/SignUpModal";
 import LoginModal from "./components/LoginModal/LoginModal";
+import NavBar from "./components/NavBar/NavBar";
 import s from "./components/NotesPage/NotesPage.module.css";
 
 function App() {
@@ -58,56 +59,64 @@ function App() {
   );
 
   return (
-    <Container className={s.notesPage}>
-      <Button onClick={() => setShowAddNote(true)} className={s.addBtn}>
-        <FaPlus />
-        <span>Add new note</span>
-      </Button>
+    <div>
+      <NavBar
+        loggedInUser={null}
+        onSignUpClicked={() => {}}
+        onLoginClicked={() => {}}
+        onLogoutSuccessful={() => {}}
+      />
+      <Container className={s.notesPage}>
+        <Button onClick={() => setShowAddNote(true)} className={s.addBtn}>
+          <FaPlus />
+          <span>Add new note</span>
+        </Button>
 
-      {notesLoading && <Spinner animation="border" variant="primary" />}
+        {notesLoading && <Spinner animation="border" variant="primary" />}
 
-      {showNotesLoadingError && (
-        <p>Something went wrong. Please refresh the page</p>
-      )}
+        {showNotesLoadingError && (
+          <p>Something went wrong. Please refresh the page</p>
+        )}
 
-      {!notesLoading && !showNotesLoadingError && (
-        <>
-          {notes.length > 0 ? notesGrid : <p>You don't have any notes yet</p>}
-        </>
-      )}
+        {!notesLoading && !showNotesLoadingError && (
+          <>
+            {notes.length > 0 ? notesGrid : <p>You don't have any notes yet</p>}
+          </>
+        )}
 
-      {showAddNote && (
-        <AddEditNote
-          onDismiss={() => setShowAddNote(false)}
-          onNoteSaved={(newNote) => {
-            setNotes([...notes, newNote]);
-            setShowAddNote(false);
-          }}
-        />
-      )}
-      {noteToEdit && (
-        <AddEditNote
-          noteToEdit={noteToEdit}
-          onDismiss={() => setNoteToEdit(null)}
-          onNoteSaved={(updatedNote) => {
-            setNotes(
-              notes.map((note) =>
-                note._id === updatedNote._id ? updatedNote : note
-              )
-            );
-            setNoteToEdit(null);
-          }}
-        />
-      )}
+        {showAddNote && (
+          <AddEditNote
+            onDismiss={() => setShowAddNote(false)}
+            onNoteSaved={(newNote) => {
+              setNotes([...notes, newNote]);
+              setShowAddNote(false);
+            }}
+          />
+        )}
+        {noteToEdit && (
+          <AddEditNote
+            noteToEdit={noteToEdit}
+            onDismiss={() => setNoteToEdit(null)}
+            onNoteSaved={(updatedNote) => {
+              setNotes(
+                notes.map((note) =>
+                  note._id === updatedNote._id ? updatedNote : note
+                )
+              );
+              setNoteToEdit(null);
+            }}
+          />
+        )}
 
-      {false && (
-        <SignUpModal onDismiss={() => {}} onSignUpSuccessful={() => {}} />
-      )}
+        {false && (
+          <SignUpModal onDismiss={() => {}} onSignUpSuccessful={() => {}} />
+        )}
 
-      {false && (
-        <LoginModal onDismiss={() => {}} onLoginSuccessful={() => {}} />
-      )}
-    </Container>
+        {false && (
+          <LoginModal onDismiss={() => {}} onLoginSuccessful={() => {}} />
+        )}
+      </Container>
+    </div>
   );
 }
 
