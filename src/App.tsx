@@ -5,6 +5,8 @@ import { NoteModel } from "./models/noteModel";
 import Note from "./components/Note/Note";
 import * as NotesApi from "./services/notes-api";
 import AddEditNote from "./components/AddEditNote/AddEditNote";
+import SignUpModal from "./components/SignUpModal/SignUpModal";
+import LoginModal from "./components/LoginModal/LoginModal";
 import s from "./components/NotesPage/NotesPage.module.css";
 
 function App() {
@@ -96,6 +98,14 @@ function App() {
             setNoteToEdit(null);
           }}
         />
+      )}
+
+      {false && (
+        <SignUpModal onDismiss={() => {}} onSignUpSuccessful={() => {}} />
+      )}
+
+      {false && (
+        <LoginModal onDismiss={() => {}} onLoginSuccessful={() => {}} />
       )}
     </Container>
   );
