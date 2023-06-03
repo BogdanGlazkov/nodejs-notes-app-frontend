@@ -5,9 +5,9 @@ import AddEditNote from "../AddEditNote/AddEditNote";
 import { NoteModel } from "../../models/noteModel";
 import Note from "../Note/Note";
 import * as NotesApi from "../../services/notes-api";
-import s from "./NotesPage.module.css";
+import s from "./NotesList.module.css";
 
-const NotesPage = () => {
+const NotesList = () => {
   const [notes, setNotes] = useState<NoteModel[]>([]);
   const [notesLoading, setNotesLoading] = useState(true);
   const [showNotesLoadingError, setShowNotesLoadingError] = useState(false);
@@ -97,4 +97,4 @@ const NotesPage = () => {
   );
 };
 
-export default NotesPage;
+export default NotesList;
