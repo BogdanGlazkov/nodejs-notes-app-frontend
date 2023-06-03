@@ -1,3 +1,4 @@
+import { ConflictError, UnauthorizedError } from "../errors/http_errors";
 import { NoteModel, NoteInput } from "../models/noteModel";
 
 export async function fetchData(input: RequestInfo, init?: RequestInit) {
@@ -7,7 +8,16 @@ export async function fetchData(input: RequestInfo, init?: RequestInit) {
   } else {
     const errorBody = await response.json();
     const errorMesssage = errorBody.error;
-    throw Error(errorMesssage);
+
+    if (response.status === 401) {
+      throw new UnauthorizedError(errorMesssage);
+    } else if (response.status === 409) {
+      throw new ConflictError(errorMesssage);
+    } else {
+      throw Error(
+        `Request failed with status: ${response.status} and error: ${errorMesssage}`
+      );
+    }
   }
 }
 
